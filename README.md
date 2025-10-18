@@ -1,1 +1,1 @@
-# HSE-repo
+# HSE-MentorSeminar-repo
