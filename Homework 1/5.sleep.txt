@@ -1,0 +1,50 @@
+При запуске скрипта с помощью команды bash, скрипт будет выполняться в другом процессе.
+Поэтому любые команды скрипта будут выполняться в другом окружении, в том числе и команды запущенные в фоне.
+Чтобы инструкции выполнялись внутри текущего окружения нужно запускать запускать скрипт, например, так:
+. ./<название файла>
+
+В текущем примере выполняется скрипт, который запускает 3 команды sleep в фоне с разными временами:
+MentSemir_homework$ . 5.sleep.sh
+    Program starting
+    All sleep comands starts
+MentSemir_homework$ jobs
+    [1]   Running                 sleep 60 &
+    [2]-  Running                 sleep 90 &
+    [3]+  Running                 sleep 120 &
+MentSemir_homework$ fg %1
+    sleep 60
+    d
+    g
+
+    ps aux
+    ^Z
+    [1]+  Stopped                 sleep 60
+MentSemir_homework$ jobs
+    [1]+  Stopped                 sleep 60
+    [2]   Running                 sleep 90 &
+    [3]-  Running                 sleep 120 &
+MentSemir_homework$ bg
+    [1]+ sleep 60 &
+MentSemir_homework$ jobs
+    [1]   Running                 sleep 60 &
+    [2]-  Running                 sleep 90 &
+    [3]+  Running                 sleep 120 &
+MentSemir_homework$ fg %2
+    sleep 90
+    ^Z
+    [2]+  Stopped                 sleep 90
+MentSemir_homework$ jobs
+    [1]   Done                    sleep 60
+    [2]+  Stopped                 sleep 90
+    [3]-  Running                 sleep 120 &
+MentSemir_homework$ bg
+    [2]+ sleep 90 &
+MentSemir_homework$ jobs
+    [2]-  Running                 sleep 90 &
+    [3]+  Running                 sleep 120 &
+
+
+При таком запуске мы смогли контролировать фоновые процессы, запущенные в рамках скрипта при помощи команд:
+    jobs - позволяет вывести список задач и запущенных в текущем окружении
+    fg - позволяет перевывести задачу на передний план(как будто мы просто выпонлили её в терминале)
+    bg - позволяет перевести задачу на задний план(как будто она запущена в фоне из текущего терминала)
